@@ -1,7 +1,6 @@
 ---
 - name: setup jenkins server
-  hosts: jenkins
-  connection: local
+  hosts: local
   become: yes
   tasks:
   - name: install package docker
