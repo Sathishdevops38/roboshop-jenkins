@@ -11,7 +11,7 @@ variable "tags" {
 }
 
 variable "instance_type"{
-  default = "t3.micro"
+  default = "m7i-flex.large"
 }
 
 variable "domain_name"{
