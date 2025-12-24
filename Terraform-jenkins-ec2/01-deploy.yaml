@@ -1,4 +1,3 @@
----
 - name: setup jenkins server
   hosts: local
   become: yes
@@ -12,17 +11,23 @@
       name: docker
       state: started 
       enabled: yes
-  - name: add ec2-user docker group
-    ansible.builtin.command: sudo usermod -aG docker ec2-user
+  - name: add ec2-user to docker group
+    ansible.builtin.user:
+      name: ec2-user
+      groups: docker
+      append: yes
   - name: install package java
     ansible.builtin.package:
-      name: java
+      name: java-17-openjdk
       state: present
-  - name: Start docker service
-    ansible.builtin.service:
-      name: java
-      state: started 
-      enabled: yes
+  - name: Download Jenkins Repo
+    ansible.builtin.get_url:
+      url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+      dest: /etc/yum.repos.d/jenkins.repo
+  - name: Import Jenkins GPG key
+    ansible.builtin.rpm_key:
+      state: present
+      key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
   - name: install package jenkins
     ansible.builtin.package:
       name: jenkins
