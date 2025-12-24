@@ -2,6 +2,13 @@
   hosts: local
   become: yes
   tasks:
+  - name: Remove conflicting Podman/Docker packages
+    ansible.builtin.dnf:
+      name:
+      - podman
+      - buildah
+      - podman-docker
+      state: absent
   - name: Install dnf-plugins-core
     ansible.builtin.dnf:
       name: dnf-plugins-core
