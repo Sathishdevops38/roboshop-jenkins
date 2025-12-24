@@ -1,0 +1,27 @@
+pipeline {
+    agent{
+        label 'Agent-1'
+    }
+    stages{
+        stage("build"){
+            step{
+                script{
+                    sh """
+                        echo "Hello world"
+                    """
+                    
+                }
+            }
+        }
+        stage("Test"){
+            step{
+                script{
+                    sh """
+                        echo "Hello world"
+                    """
+                    
+                }
+            }
+        }
+    }
+}
