@@ -2,10 +2,20 @@
   hosts: local
   become: yes
   tasks:
-  - name: install package docker
-    ansible.builtin.package:
-      name: docker
+  - name: Install dnf-plugins-core
+    ansible.builtin.dnf:
+      name: dnf-plugins-core
+      state: present 
+  - name: Add Docker CE repository
+    ansible.builtin.get_url:
+      url: https://download.docker.com/linux/rhel/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+      mode: '0644'    
+  - name: Install Docker CE components
+    ansible.builtin.dnf:
+      name: docker-ce
       state: present
+      update_cache: yes
   - name: Start docker service
     ansible.builtin.service:
       name: docker
