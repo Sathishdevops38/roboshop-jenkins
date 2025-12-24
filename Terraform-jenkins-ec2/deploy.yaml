@@ -1,0 +1,35 @@
+---
+- name: setup jenkins server
+  hosts: jenkins
+  connection: local
+  become: yes
+  tasks:
+  - name: install package docker
+    ansible.builtin.package:
+      name: docker
+      state: present
+  - name: Start docker service
+    ansible.builtin.service:
+      name: docker
+      state: started 
+      enabled: yes
+  - name: add ec2-user docker group
+    ansible.builtin.command: sudo usermod -aG docker ec2-user
+  - name: install package java
+    ansible.builtin.package:
+      name: java
+      state: present
+  - name: Start docker service
+    ansible.builtin.service:
+      name: java
+      state: started 
+      enabled: yes
+  - name: install package jenkins
+    ansible.builtin.package:
+      name: jenkins
+      state: present
+  - name: Start jenkins service
+    ansible.builtin.service:
+      name: jenkins
+      state: started 
+      enabled: yes
