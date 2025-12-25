@@ -76,15 +76,6 @@ resource "aws_iam_instance_profile" "jenkins" {
   role = "BastionTerraformAdmin"
 }
 
-# resource "aws_vpc_security_group_ingress_rule" "jenkins" {
-#   security_group_id = local.security_group_id
-
-#   cidr_ipv4   = "0.0.0.0/0"
-#   from_port   = 22
-#   ip_protocol = "tcp"
-#   to_port     = 22
-# }
-
 resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
   ip_protocol       = "-1"
   from_port         = 0
