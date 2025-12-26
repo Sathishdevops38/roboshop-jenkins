@@ -62,7 +62,7 @@ resource "aws_instance" "sonar" {
 
 resource "aws_route53_record" "agent" {
   zone_id = var.zone_id
-  name    = var.domain_name
+  name    = "sonar-${var.environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.sonar.public_ip]
@@ -119,10 +119,10 @@ resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
   cidr_ipv4         = "0.0.0.0/0"
   security_group_id = local.security_group_id
 }
-resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
-  ip_protocol       = "-1"
-  from_port         = 0
-  to_port           = 0
-  cidr_ipv4         = "0.0.0.0/0"
-  security_group_id = local.security_group_id
-}
+# resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
+#   ip_protocol       = "-1"
+#   from_port         = 0
+#   to_port           = 0
+#   cidr_ipv4         = "0.0.0.0/0"
+#   security_group_id = local.security_group_id
+# }
