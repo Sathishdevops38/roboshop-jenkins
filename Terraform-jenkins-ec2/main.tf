@@ -113,6 +113,13 @@ resource "aws_iam_instance_profile" "jenkins" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
+  ip_protocol       = "tcp"
+  from_port         = 22
+  to_port           = 22
+  cidr_ipv4         = "0.0.0.0/0"
+  security_group_id = local.security_group_id
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_all_ingress" {
   ip_protocol       = "-1"
   from_port         = 0
   to_port           = 0
