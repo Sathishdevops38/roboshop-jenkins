@@ -4,16 +4,6 @@ sudo timedatectl set-timezone UTC
 sudo systemctl restart chronyd || systemctl restart systemd-timesyncd
 sudo timedatectl
 
-
-sudo alternatives --config java
-echo "Configuring system alternatives..."
-# Ensure the script runs with root privileges
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root (use sudo)"
-   exit 1
-fi
-
-
 # 1. Install Java 17 if not already present
 echo "Installing OpenJDK 17..."
 sudo rpm --import https://yum.corretto.aws/corretto.key
@@ -38,12 +28,12 @@ echo "--------------------------------------"
 echo "Success! Current Java version:"
 java -version
 echo "JAVA_HOME is set to: $JAVA_HOME"
-
-sudo sysctl -w vm.max_map_count=262144
-sudo echo 'vm.max_map_count=262144' >> /etc/sysctl.conf
+echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf
+echo "fs.file-max=65536" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
 
 sudo yum install wget unzip -y
-sudo cd /opt
+cd /opt/
 sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.8.100196.zip
 sudo unzip sonarqube-9.9.8.100196.zip
 sudo mv sonarqube-9.9.8.100196 sonarqube
