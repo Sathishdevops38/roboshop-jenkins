@@ -24,14 +24,57 @@ sudo usermod -aG docker ec2-user
 
 # install java
 sudo yum install fontconfig java-21-openjdk -y
+echo "Configuring system alternatives..."
+alternatives --set java /usr/lib/jvm/java-21-openjdk/bin/java
+alternatives --set javac /usr/lib/jvm/java-21-openjdk/bin/javac
+
+# 3. Export JAVA_HOME for the current session and future shells
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
 
 
-# install jenkins
-# sudo curl -o /etc/yum.repos.d/jenkins.repo \
-#     https://pkg.jenkins.io/redhat-stable/jenkins.repo
-# sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-# # Add required dependencies for the jenkins package
-# sudo yum install jenkins -y
-# sudo systemctl daemon-reload
-# sudo systemctl start jenkins
-# sudo systemctl enable jenkins
+#install nodejs
+sudo dnf module disable nodejs -y
+dnf module enable nodejs:20 -y
+dnf install nodejs -y
+
+#install Trivy
+cat << EOF | sudo tee -a /etc/yum.repos.d/trivy.repo
+[trivy]
+name=Trivy repository
+baseurl=https://aquasecurity.github.io/trivy-repo/rpm/releases/\$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://aquasecurity.github.io/trivy-repo/rpm/public.key
+EOF
+sudo yum -y update
+sudo yum -y install trivy
+
+#install maven
+
+MAVEN_VERSION="3.9.6"
+INSTALL_DIR="/opt/maven"
+DOWNLOAD_URL="https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+
+echo "Updating system and installing Java (required for Maven)..."
+sudo yum update -y
+
+echo "Downloading Maven ${MAVEN_VERSION}..."
+wget ${DOWNLOAD_URL} -P /tmp
+
+echo "Extracting Maven to ${INSTALL_DIR}..."
+sudo mkdir -p ${INSTALL_DIR}
+sudo tar -xzf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz -C ${INSTALL_DIR} --strip-components=1
+
+echo "Configuring Environment Variables..."
+# Create a profile script so it persists after reboot
+cat <<EOF | sudo tee /etc/profile.d/maven.sh
+export M2_HOME=${INSTALL_DIR}
+export PATH=\${M2_HOME}/bin:\${PATH}
+EOF
+
+# Make the script executable and load variables for the current session
+sudo chmod +x /etc/profile.d/maven.sh
+source /etc/profile.d/maven.sh
+
+echo "Verification:"
+mvn -version
