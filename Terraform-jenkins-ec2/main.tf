@@ -27,7 +27,7 @@ resource "aws_instance" "master" {
 
 resource "aws_route53_record" "master" {
   zone_id = var.zone_id
-  name    = var.domain_name
+  name    = "jenkins-${var.environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.master.private_ip]
@@ -99,7 +99,7 @@ resource "aws_instance" "agent" {
 
 resource "aws_route53_record" "agent" {
   zone_id = var.zone_id
-  name    = var.domain_name
+  name    = "agent-${var.environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
   records = [aws_instance.agent.private_ip]
