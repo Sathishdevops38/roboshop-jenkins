@@ -27,5 +27,26 @@ pipeline {
                 }
             }
         }
+        stage('Install Dependencies') {
+            steps {
+                script{
+                    sh """
+                        cd catalogue
+                        npm install
+                    """
+                }
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                script{
+                    sh """
+                        cd catalogue
+                        npm test
+                    """
+                }
+            }
+        }
     }
+
 }        
