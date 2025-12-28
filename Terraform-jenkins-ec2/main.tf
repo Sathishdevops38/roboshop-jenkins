@@ -30,7 +30,7 @@ resource "aws_route53_record" "master" {
   name    = "jenkins-${var.environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
-  records = [aws_instance.master.private_ip]
+  records = [aws_instance.master.public_ip]
   allow_overwrite = true
 }
 
