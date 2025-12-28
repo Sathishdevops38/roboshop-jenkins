@@ -60,7 +60,7 @@ resource "aws_instance" "sonar" {
   )  
 }
 
-resource "aws_route53_record" "agent" {
+resource "aws_route53_record" "sonar" {
   zone_id = var.zone_id
   name    = "sonar-${var.environment}.${var.domain_name}"
   type    = "A"
