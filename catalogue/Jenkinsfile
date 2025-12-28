@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script{
                     sh """
-                    cd catalogue
+                        cd catalogue
                         npm install
                     """
                 }
@@ -41,6 +41,7 @@ pipeline {
             steps {
                 script{
                     sh """
+                        cd catalogue
                         npm test
                     """
                 }
