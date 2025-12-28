@@ -56,7 +56,7 @@ pipeline {
                 script{
                     withSonarQubeEnv('sonar-server') {
                         sh """
-                        cd catalogure
+                        cd catalogue
                         "${scannerHome}/bin/sonar-scanner"
                         """
                     }
