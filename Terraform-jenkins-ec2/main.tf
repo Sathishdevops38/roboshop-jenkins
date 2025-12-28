@@ -102,7 +102,7 @@ resource "aws_route53_record" "agent" {
   name    = "agent-${var.environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
-  records = [aws_instance.agent.private_ip]
+  records = [aws_instance.agent.public_ip]
   allow_overwrite = true
 }
 
